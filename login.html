@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Log In — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body.login-page {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+    }
+    .login-wrapper {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .login-box {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(15, 23, 42, 0.1);
+    }
+    .login-logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 900;
+      color: white;
+      margin: 0 auto 20px;
+    }
+    .login-title {
+      text-align: center;
+      font-size: 28px;
+      margin: 0 0 8px;
+      color: #0f172a;
+    }
+    .login-subtitle {
+      text-align: center;
+      color: #64748b;
+      margin: 0 0 32px;
+    }
+    .login-form-group {
+      margin-bottom: 20px;
+    }
+    .login-form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .login-form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+    .login-form-group input:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+    .login-error {
+      background: #fee;
+      border: 1px solid #fcc;
+      color: #c33;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .login-error.show {
+      display: block;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+    .login-btn:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    }
+    .login-footer {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+      color: #64748b;
+    }
+    .login-footer a {
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .hidden {
+      display: none;
+    }
+    .cancel-btn {
+      background: #6b7280;
+    }
+  </style>
+</head>
+<body class="login-page">
+  
+  <div class="login-wrapper">
+    <div class="login-box">
+      <div class="login-logo">PP</div>
+      <h1 class="login-title">Parkinson's Pal</h1>
+      <p class="login-subtitle">Your personal health companion</p>
+
+      <div id="login-form">
+        <div class="login-form-group">
+          <label for="login-username">Username</label>
+          <input id="login-username" type="text" placeholder="Enter your username" autocomplete="username">
+        </div>
+        
+        <div class="login-form-group">
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" placeholder="Enter your password" autocomplete="current-password">
+        </div>
+        
+        <div id="login-error" class="login-error"></div>
+        
+        <button id="login-btn" class="login-btn">Log In</button>
+        
+        <div class="login-footer">
+          <p>No account? <a id="show-register">Create one</a></p>
+        </div>
+      </div>
+
+      <div id="register-form" class="hidden">
+        <div class="login-form-group">
+          <label for="reg-username">Username</label>
+          <input id="reg-username" type="text" placeholder="Choose a username" autocomplete="username">
+        </div>
+        
+        <div class="login-form-group">
+          <label for="reg-password">Password</label>
+          <input id="reg-password" type="password" placeholder="Choose a password" autocomplete="new-password">
+        </div>
+        
+        <div class="login-form-group">
+          <label for="reg-display">Display Name (Optional)</label>
+          <input id="reg-display" type="text" placeholder="How you'd like to be called" autocomplete="name">
+        </div>
+        
+        <div id="register-error" class="login-error"></div>
+        <button id="cancel-register" class="login-btn cancel-btn">Back to Log In</button>
+        <button id="register-btn" class="login-btn">Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    console.log('Login page script starting...');
+    
+    // Redirect if already logged in
+    try {
+      var stored = localStorage.getItem('pp_current_user');
+      if (stored) {
+        var user = JSON.parse(stored);
+        if (user && user.username) {
+          window.location.href = 'dashboard.html';
+        }
+      }
+    } catch(e) {
+      console.error('Redirect check error:', e);
+    }
+    
+    // Wait for DOM to be ready
+    function initLogin() {
+      console.log('Initializing login...');
+      
+      var loginForm = document.getElementById('login-form');
+      var registerForm = document.getElementById('register-form');
+      var showRegisterLink = document.getElementById('show-register');
+      var cancelRegisterBtn = document.getElementById('cancel-register');
+      var loginBtn = document.getElementById('login-btn');
+      var registerBtn = document.getElementById('register-btn');
+      
+      console.log('Elements found:', {
+        loginForm: !!loginForm,
+        registerForm: !!registerForm,
+        loginBtn: !!loginBtn,
+        registerBtn: !!registerBtn
+      });
+      
+      // Show register form
+      if (showRegisterLink) {
+        showRegisterLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          console.log('Showing register form');
+          loginForm.classList.add('hidden');
+          registerForm.classList.remove('hidden');
+        });
+      }
+      
+      // Show login form
+      if (cancelRegisterBtn) {
+        cancelRegisterBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          console.log('Showing login form');
+          registerForm.classList.add('hidden');
+          loginForm.classList.remove('hidden');
+        });
+      }
+      
+      // Login button
+      if (loginBtn) {
+        loginBtn.addEventListener('click', async function() {
+          console.log('Login button clicked');
+          
+          var username = document.getElementById('login-username').value.trim();
+          var password = document.getElementById('login-password').value;
+          var errorDiv = document.getElementById('login-error');
+          
+          console.log('Username:', username, 'Password length:', password.length);
+          
+          if (!username || !password) {
+            if (errorDiv) {
+              errorDiv.textContent = 'Please enter username and password';
+              errorDiv.classList.add('show');
+            }
+            return;
+          }
+          
+          // Hash password
+          try {
+            var encoder = new TextEncoder();
+            var data = encoder.encode(password);
+            var hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            var hashArray = Array.from(new Uint8Array(hashBuffer));
+            var hashedPassword = hashArray.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+            
+            console.log('Password hashed');
+            
+            // Get users
+            var usersJson = localStorage.getItem('pp_users_v1') || '[]';
+            var users = JSON.parse(usersJson);
+            
+            console.log('Users in storage:', users.length);
+            
+            // Find user
+            var user = users.find(function(u) {
+              return u.username === username && u.passwordHash === hashedPassword;
+            });
+            
+            if (user) {
+              console.log('User found, logging in...');
+              // Save current user
+              localStorage.setItem('pp_current_user', JSON.stringify({
+                username: user.username,
+                display: user.display || user.username
+              }));
+              
+              // Redirect to dashboard
+              window.location.href = 'dashboard.html';
+            } else {
+              console.log('Invalid credentials');
+              if (errorDiv) {
+                errorDiv.textContent = 'Invalid username or password';
+                errorDiv.classList.add('show');
+              }
+            }
+          } catch (err) {
+            console.error('Login error:', err);
+            if (errorDiv) {
+              errorDiv.textContent = 'Login failed: ' + err.message;
+              errorDiv.classList.add('show');
+            }
+          }
+        });
+      }
+      
+      // Register button
+      if (registerBtn) {
+        registerBtn.addEventListener('click', async function() {
+          console.log('Register button clicked');
+          
+          var username = document.getElementById('reg-username').value.trim();
+          var password = document.getElementById('reg-password').value;
+          var display = document.getElementById('reg-display').value.trim();
+          var errorDiv = document.getElementById('register-error');
+          
+          if (!username || !password) {
+            if (errorDiv) {
+              errorDiv.textContent = 'Please enter username and password';
+              errorDiv.classList.add('show');
+            }
+            return;
+          }
+          
+          try {
+            // Hash password
+            var encoder = new TextEncoder();
+            var data = encoder.encode(password);
+            var hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            var hashArray = Array.from(new Uint8Array(hashBuffer));
+            var hashedPassword = hashArray.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+            
+            // Get users
+            var usersJson = localStorage.getItem('pp_users_v1') || '[]';
+            var users = JSON.parse(usersJson);
+            
+            // Check if username exists
+            if (users.find(function(u) { return u.username === username; })) {
+              if (errorDiv) {
+                errorDiv.textContent = 'Username already exists';
+                errorDiv.classList.add('show');
+              }
+              return;
+            }
+            
+            // Add new user
+            users.push({
+              username: username,
+              passwordHash: hashedPassword,
+              display: display || username
+            });
+            
+            localStorage.setItem('pp_users_v1', JSON.stringify(users));
+            
+            // Auto-login
+            localStorage.setItem('pp_current_user', JSON.stringify({
+              username: username,
+              display: display || username
+            }));
+            
+            console.log('User registered, redirecting...');
+            window.location.href = 'dashboard.html';
+          } catch (err) {
+            console.error('Register error:', err);
+            if (errorDiv) {
+              errorDiv.textContent = 'Registration failed: ' + err.message;
+              errorDiv.classList.add('show');
+            }
+          }
+        });
+      }
+      
+      // Enter key support
+      var passField = document.getElementById('login-password');
+      if (passField && loginBtn) {
+        passField.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter' || e.keyCode === 13) {
+            loginBtn.click();
+          }
+        });
+      }
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initLogin);
+    } else {
+      initLogin();
+    }
+  </script>
+</body>
+</html>

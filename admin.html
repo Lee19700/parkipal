@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar">
+    <div class="brand"><div class="logo">PP</div><div><h1>Admin</h1><p class="muted">Manage app settings, archives and logs</p></div></div>
+    <div class="top-actions"></div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="card">
+        <h2>Admin Controls</h2>
+        <p class="muted">Run archives, change theme, view login activity, and manage user accounts.</p>
+
+        <div class="section-gap">
+          <h3>Password Management</h3>
+          <p class="muted">Change your password or reset credentials.</p>
+          
+          <label for="admin-current-pass">Current Password</label>
+          <input id="admin-current-pass" type="password" placeholder="Enter current password">
+          
+          <label for="admin-new-pass">New Password</label>
+          <input id="admin-new-pass" type="password" placeholder="Enter new password">
+          
+          <label for="admin-confirm-pass">Confirm New Password</label>
+          <input id="admin-confirm-pass" type="password" placeholder="Confirm new password">
+          
+          <div class="form-actions">
+            <button id="admin-change-password" class="btn btn-primary">Change Password</button>
+          </div>
+          <div id="password-status" class="muted section-gap"></div>
+
+          <h3 class="section-gap">Temporary Access for Healthcare Providers</h3>
+          <p class="muted">Create temporary read-only accounts for your doctors or caregivers.</p>
+          
+          <label for="temp-username">Username for Provider</label>
+          <input id="temp-username" placeholder="e.g., dr-smith">
+          
+          <label for="temp-password">Temporary Password</label>
+          <input id="temp-password" type="text" placeholder="Auto-generated or custom">
+          <button id="generate-temp-password" class="btn btn-ghost">Generate Random</button>
+          
+          <label for="temp-expiry">Access Expires</label>
+          <input id="temp-expiry" type="date">
+          
+          <label>
+            <input id="temp-readonly" type="checkbox" checked>
+            Read-only access (cannot edit your data)
+          </label>
+          
+          <div class="form-actions">
+            <button id="create-temp-access" class="btn btn-primary">Create Temporary Access</button>
+          </div>
+          
+          <h4 class="section-gap">Active Temporary Accounts</h4>
+          <div id="temp-accounts-list"></div>
+
+          <h3 class="section-gap">Archive</h3>
+          <p class="muted">Create a snapshot of current data.</p>
+          <div class="form-actions"><button id="admin-archive-now" class="btn btn-primary">Archive Now</button></div>
+
+          <h3 class="section-gap">Theme / Mode</h3>
+          <label>Mode</label>
+          <select id="admin-mode" title="Select display mode"><option value="day">Day</option><option value="night">Night</option></select>
+          <label class="section-gap" for="admin-accent">Primary color</label>
+          <input id="admin-accent" type="color" value="#2563eb">
+          <label for="admin-bg">Background color</label>
+          <input id="admin-bg" type="color" value="#f6f8fb">
+          <div class="form-actions"><button id="admin-apply-theme" class="btn btn-primary">Apply Theme</button> <button id="admin-reset-theme" class="btn btn-ghost">Reset</button></div>
+
+          <h3 class="section-gap">Login Activity</h3>
+          <div id="login-log" class="section-gap"></div>
+          <div class="form-actions"><button id="admin-clear-log" class="btn btn-danger">Clear Log</button></div>
+
+          <div id="admin-status" class="muted section-gap"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="api-client.js"></script>
+  <script src="auth.js"></script>
+  <script src="archive.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Medication Logs — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div id="debug-banner" class="ai-warning"></div>
+  
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>Medication Logs</h1>
+        <p class="muted">Complete immutable history of all medications taken</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="top-dropdown">
+        <button class="drop-btn btn">Pages ▾</button>
+        <div class="menu">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="medications.html">Medications</a>
+          <a href="vitals.html">Vitals</a>
+          <a href="symptoms.html">Symptoms</a>
+          <a href="fluids.html">Fluids</a>
+          <a href="foods.html">Foods</a>
+        </div>
+      </div>
+      <div id="user-status">
+        <div id="status-when-logged-out">
+          <button id="show-login" class="btn btn-primary" type="button">Log In</button>
+        </div>
+        <div id="status-when-logged-in" class="hidden">
+          <div>Signed in as <strong id="current-username"></strong></div>
+          <div class="user-controls">
+            <a href="personal.html" class="btn btn-ghost">Profile</a>
+            <button id="btn-logout" class="btn" type="button">Log out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="card">
+        <div class="card-header-flex">
+          <div>
+            <h2>Medication Log (Read-Only)</h2>
+            <p class="muted">Complete immutable history of all medications taken - this record cannot be altered or deleted</p>
+          </div>
+          <a href="medications.html" class="btn btn-ghost">← Back to Medications</a>
+        </div>
+
+        <div class="section-gap">
+          <div class="card info-banner" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px; margin-bottom: 20px;">
+            <p style="margin: 0; color: #92400e;">
+              <strong>🔒 Protected Record:</strong> This is an immutable log. Entries cannot be edited or deleted to maintain accurate medical history.
+            </p>
+          </div>
+
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <h3>All Medication Entries</h3>
+              <div>
+                <label for="log-filter" style="margin-right: 8px;">Filter:</label>
+                <select id="log-filter" style="padding: 6px 12px;">
+                  <option value="all">All Time</option>
+                  <option value="today">Today</option>
+                  <option value="week">This Week</option>
+                  <option value="month">This Month</option>
+                </select>
+              </div>
+            </div>
+            <div id="medication-log-list" class="log-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="api-client.js"></script>
+  <script src="auth.js"></script>
+  <script src="meds_store.js"></script>
+  <script src="med_log.js"></script>
+  <script>
+    if (window.PPAuth && typeof window.PPAuth.requireAuth === 'function') window.PPAuth.requireAuth();
+    else document.addEventListener('DOMContentLoaded', function(){ if (window.PPAuth) window.PPAuth.requireAuth(); });
+
+    // Load and display medication logs
+    document.addEventListener('DOMContentLoaded', function() {
+      var logList = document.getElementById('medication-log-list');
+      var filterSelect = document.getElementById('log-filter');
+
+      function renderLogs(filter) {
+        if (!window.MedLog) {
+          logList.innerHTML = '<p class="muted">Loading logs...</p>';
+          return;
+        }
+
+        var logs = window.MedLog.getAll();
+        if (!logs || logs.length === 0) {
+          logList.innerHTML = '<p class="muted">No medication logs yet. Logs appear here when you take medications.</p>';
+          return;
+        }
+
+        // Apply filter
+        var now = new Date();
+        var filtered = logs.filter(function(log) {
+          if (filter === 'all') return true;
+          var logDate = new Date(log.timestamp);
+          if (filter === 'today') {
+            return logDate.toDateString() === now.toDateString();
+          } else if (filter === 'week') {
+            var weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            return logDate >= weekAgo;
+          } else if (filter === 'month') {
+            return logDate.getMonth() === now.getMonth() && logDate.getFullYear() === now.getFullYear();
+          }
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          logList.innerHTML = '<p class="muted">No logs found for selected time period.</p>';
+          return;
+        }
+
+        // Sort by timestamp descending
+        filtered.sort(function(a, b) {
+          return new Date(b.timestamp) - new Date(a.timestamp);
+        });
+
+        var html = '<div class="log-entries">';
+        filtered.forEach(function(log) {
+          var dt = new Date(log.timestamp);
+          var dateStr = dt.toLocaleDateString();
+          var timeStr = dt.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+          
+          html += '<div class="log-entry" style="padding: 12px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: start;">';
+          html += '<div style="flex: 1;">';
+          html += '<div style="font-weight: 600; color: #1f2937; margin-bottom: 4px;">' + (log.medName || log.medicationName || log.name || 'Unknown Medication') + '</div>';
+          if (log.dose) {
+            html += '<div style="color: #6b7280; font-size: 0.9rem;">Dose: ' + log.dose + '</div>';
+          }
+          
+          // Show tablets taken and stock remaining
+          if (log.tabletsTaken || log.stockAfter !== undefined) {
+            html += '<div style="color: #3b82f6; font-size: 0.9rem; margin-top: 4px; display: flex; gap: 16px;">';
+            if (log.tabletsTaken) {
+              html += '<span>💊 Taken: <strong>' + log.tabletsTaken + '</strong> tablet' + (log.tabletsTaken > 1 ? 's' : '') + '</span>';
+            }
+            if (log.stockAfter !== undefined) {
+              html += '<span>📦 Stock remaining: <strong>' + log.stockAfter + '</strong></span>';
+            }
+            html += '</div>';
+          }
+          
+          if (log.notes) {
+            html += '<div style="color: #6b7280; font-size: 0.9rem; margin-top: 4px;">📝 ' + log.notes + '</div>';
+          }
+          html += '</div>';
+          html += '<div style="text-align: right; min-width: 120px;">';
+          html += '<div style="color: #6b7280; font-size: 0.9rem;">' + dateStr + '</div>';
+          html += '<div style="color: #3b82f6; font-weight: 500;">' + timeStr + '</div>';
+          html += '</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+        
+        logList.innerHTML = html;
+      }
+
+      // Initial render
+      renderLogs('all');
+
+      // Filter change
+      if (filterSelect) {
+        filterSelect.addEventListener('change', function() {
+          renderLogs(this.value);
+        });
+      }
+
+      // Refresh every 30 seconds
+      setInterval(function() {
+        renderLogs(filterSelect ? filterSelect.value : 'all');
+      }, 30000);
+    });
+  </script>
+</body>
+</html>

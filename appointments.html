@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Appointments — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar">
+    <div class="brand"><div class="logo">PP</div><div><h1>Appointments</h1><p class="muted">Manage your upcoming appointments</p></div></div>
+    <div class="top-actions"></div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="card">
+        <h2>Appointments</h2>
+        <p class="muted">Add, edit and remove appointments. The dashboard will show your next upcoming appointment.</p>
+
+        <div class="section-gap">
+          <form id="appt-form">
+            <input type="hidden" id="appt-id">
+            <label>Title<br><input id="appt-title" required></label>
+            <label>Date & time<br><input id="appt-datetime" type="datetime-local" required></label>
+            <div class="form-actions"><button id="save-appt" class="btn btn-primary" type="button">Save</button> <button id="clear-appt" class="btn btn-ghost" type="button">Clear</button></div>
+          </form>
+
+          <h3 class="section-gap">Upcoming appointments</h3>
+          <div id="appts-list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="api-client.js"></script>
+  <script src="auth.js"></script>
+  <script src="archive.js"></script>
+  <script src="appointments.js"></script>
+</body>
+</html>

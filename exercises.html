@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Exercise Videos — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>Exercise Videos</h1>
+        <p class="muted">Record and track your exercise progress for your care team</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="top-dropdown">
+        <button class="drop-btn btn">Pages ▾</button>
+        <div class="menu">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="medications.html">Medications</a>
+          <a href="exercises.html">Exercises</a>
+          <a href="vitals.html">Vitals</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <!-- Upload New Video -->
+      <section class="card">
+        <h2>Upload Exercise Video</h2>
+        <p class="muted">Record or upload video clips of your exercises to track progress and share with your doctors</p>
+
+        <div class="exercise-upload-section">
+          <label for="exercise-title">Exercise Name / Title</label>
+          <input id="exercise-title" type="text" placeholder="e.g., Walking - Morning Session">
+
+          <label for="exercise-type">Exercise Type</label>
+          <select id="exercise-type">
+            <option value="">-- Select type --</option>
+            <option value="walking">Walking</option>
+            <option value="balance">Balance Exercises</option>
+            <option value="strength">Strength Training</option>
+            <option value="flexibility">Flexibility / Stretching</option>
+            <option value="hand-coordination">Hand Coordination</option>
+            <option value="speech">Speech Exercises</option>
+            <option value="physiotherapy">Physiotherapy</option>
+            <option value="other">Other</option>
+          </select>
+
+          <label for="exercise-date">Date</label>
+          <input id="exercise-date" type="date">
+
+          <label for="exercise-duration">Duration (minutes)</label>
+          <input id="exercise-duration" type="number" min="1" placeholder="e.g., 15">
+
+          <label for="exercise-video">Video File</label>
+          <input id="exercise-video" type="file" accept="video/*" class="file-input">
+          <div id="video-preview" class="video-preview-container"></div>
+
+          <label for="exercise-notes">Notes / Observations</label>
+          <textarea id="exercise-notes" rows="4" placeholder="How did you feel? Any difficulties? Progress notes..."></textarea>
+
+          <div class="form-actions">
+            <button id="btn-upload-exercise" class="btn btn-primary">Save Exercise Video</button>
+            <button id="btn-clear-exercise" class="btn btn-ghost">Clear</button>
+          </div>
+
+          <div id="upload-status" class="muted section-gap"></div>
+        </div>
+      </section>
+
+      <!-- Filter and Stats -->
+      <section class="card section-gap">
+        <h2>Exercise History</h2>
+        <div class="exercise-stats">
+          <div class="stat-card">
+            <div class="stat-value" id="total-videos">0</div>
+            <div class="stat-label">Total Videos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="total-duration">0</div>
+            <div class="stat-label">Total Minutes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="this-week">0</div>
+            <div class="stat-label">This Week</div>
+          </div>
+        </div>
+
+        <div class="filter-row section-gap">
+          <label for="filter-exercise-type" class="sr-only">Filter by exercise type</label>
+          <select id="filter-exercise-type" class="filter-input" title="Filter by exercise type">
+            <option value="">All Exercise Types</option>
+            <option value="walking">Walking</option>
+            <option value="balance">Balance Exercises</option>
+            <option value="strength">Strength Training</option>
+            <option value="flexibility">Flexibility / Stretching</option>
+            <option value="hand-coordination">Hand Coordination</option>
+            <option value="speech">Speech Exercises</option>
+            <option value="physiotherapy">Physiotherapy</option>
+            <option value="other">Other</option>
+          </select>
+          <button id="btn-export-exercises" class="btn btn-ghost">Export Report</button>
+        </div>
+      </section>
+
+      <!-- Video Gallery -->
+      <section class="card section-gap">
+        <h2>Saved Exercise Videos</h2>
+        <div id="exercise-list" class="exercise-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="api-client.js"></script>
+  <script src="auth.js"></script>
+  <script src="voice-input.js"></script>
+  <script src="archive.js"></script>
+  <script src="exercises.js"></script>
+</body>
+</html>

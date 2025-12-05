@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Login Data</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+    .box {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      max-width: 400px;
+      text-align: center;
+    }
+    h1 { color: #333; margin-bottom: 20px; }
+    p { color: #666; margin-bottom: 20px; line-height: 1.6; }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+    }
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+    .btn-secondary {
+      background: #6b7280;
+      color: white;
+    }
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
+    .success {
+      background: #d1fae5;
+      border: 2px solid #10b981;
+      color: #065f46;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h1>🔄 Reset Login Data</h1>
+  <p>This will clear all usernames, passwords, and logout any current user.</p>
+  <p><strong>Warning:</strong> This action cannot be undone!</p>
+  
+  <button class="btn-danger" onclick="resetAll()">Clear All Login Data</button>
+  <button class="btn-secondary" onclick="goToLogin()">Go to Login</button>
+  
+  <div id="success" class="success">
+    ✓ All login data cleared!<br>
+    Click "Go to Login" to create a new account.
+  </div>
+</div>
+
+<script>
+function resetAll() {
+  // Clear all login-related data
+  localStorage.removeItem('pp_users_v1');
+  localStorage.removeItem('pp_current_user');
+  localStorage.removeItem('pp_biometric_v1');
+  localStorage.removeItem('pp_login_log_v1');
+  
+  console.log('All login data cleared');
+  
+  // Show success message
+  document.getElementById('success').style.display = 'block';
+}
+
+function goToLogin() {
+  window.location.href = 'login2.html';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Parkinson's Pal</title>
+  <script>
+    // Auto-redirect to dashboard if logged in, otherwise to login
+    (function(){
+      try {
+        var current = localStorage.getItem('pp_current_user');
+        if (current && JSON.parse(current).username) {
+          window.location.href = 'dashboard.html';
+        } else {
+          window.location.href = 'login2.html';
+        }
+      } catch(e) {
+        window.location.href = 'login2.html';
+      }
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting...</p>
+</body>
+</html>

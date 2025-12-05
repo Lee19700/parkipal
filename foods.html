@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Food Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>Food Tracker</h1>
+        <p class="muted">Log meals, items and optional calories to monitor eating patterns.</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="top-dropdown">
+        <button class="drop-btn btn">Pages ▾</button>
+        <div class="menu">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="medications.html">Medications</a>
+          <a href="vitals.html">Vitals</a>
+          <a href="symptoms.html">Symptoms</a>
+          <a href="fluids.html">Fluids</a>
+          <a href="foods.html">Foods</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="card">
+        <h2>New Meal</h2>
+        <form id="food-form">
+          <label>Date & time<br>
+            <input id="food-time" type="datetime-local">
+          </label>
+
+          <label>Meal type<br>
+            <select id="meal-type">
+              <option value="Breakfast">Breakfast</option>
+              <option value="Lunch">Lunch</option>
+              <option value="Dinner">Dinner</option>
+              <option value="Snack">Snack</option>
+            </select>
+          </label>
+
+          <label>Items (comma-separated)<br>
+            <input id="items" placeholder="eg. 1 apple, toast, yogurt">
+          </label>
+
+          <label>Calories (kcal, optional)<br>
+            <input id="calories" type="number" min="0" step="1" placeholder="e.g. 450">
+          </label>
+
+          <label>Notes<br>
+            <input id="food-notes">
+          </label>
+
+          <div class="form-actions">
+            <button id="add-food" type="button">Add Meal</button>
+            <button id="clear-foods" type="button">Clear All</button>
+          </div>
+        </form>
+
+        <h3>Daily Totals</h3>
+        <p><strong>Meals today:</strong> <span id="meals-today">0</span> — <strong>Calories today:</strong> <span id="calories-today">0</span> kcal</p>
+
+        <h3>History</h3>
+        <div id="food-entries"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <small>Entries stored locally in this browser.</small>
+  </footer>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="api-client.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    if (window.PPAuth && typeof window.PPAuth.requireAuth === 'function') window.PPAuth.requireAuth();
+    else document.addEventListener('DOMContentLoaded', function(){ if (window.PPAuth) window.PPAuth.requireAuth(); });
+  </script>
+  <script src="foods.js"></script>
+  <script src="archive.js"></script>
+</body>
+</html>

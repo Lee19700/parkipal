@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>Dashboard</h1>
+        <p class="muted">Overview</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div id="user-status-small" class="muted">Welcome</div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="dashboard-grid">
+        <div class="card" id="welcome-card">
+          <h2 id="welcome-text">Welcome</h2>
+          <p class="muted" id="welcome-sub">Good to see you.</p>
+        </div>
+
+        <div class="card" id="appt-card">
+          <h3>Next appointment</h3>
+          <div id="appt-info">
+            <div id="appt-none">No upcoming appointment. Manage appointments on the appointments page.</div>
+            <div id="appt-details" class="hidden">
+              <div id="appt-title-display"></div>
+              <div id="appt-countdown" class="big-clock">—</div>
+            </div>
+          </div>
+          <div class="section-gap">
+            <a href="appointments.html" class="btn btn-primary">Manage appointments</a>
+          </div>
+        </div>
+
+        <div class="card" id="news2-card">
+          <h3>NEWS2 overview</h3>
+          <div id="news2-current-score" class="muted news2-score-display">—</div>
+          <canvas id="news2-chart" width="600" height="160" class="chart-canvas"></canvas>
+          <div id="news2-msg" class="muted"></div>
+        </div>
+
+        <div class="card" id="symptoms-card">
+          <h3>Symptoms overview</h3>
+          <canvas id="symptoms-chart" width="600" height="160" class="chart-canvas"></canvas>
+          <div id="symptoms-summary" class="muted">Loading…</div>
+        </div>
+
+        <div class="card" id="next-med-card">
+          <h3>Next medication</h3>
+          <div id="next-med" class="muted">Loading…</div>
+          <div class="form-actions section-gap">
+            <button id="show-meds-popup-btn" class="btn btn-primary">Show Meds Due Now</button>
+          </div>
+        </div>
+
+        <div class="card" id="ai-card">
+          <h3>How are you doing?</h3>
+          <p class="muted">I'd like to check in — tell me how you're feeling today.</p>
+          <textarea id="ai-input" placeholder="I'm feeling..." rows="3" class="full-width"></textarea>
+          <div class="form-actions"><button id="ai-send" class="btn btn-primary">Send</button></div>
+          <div id="ai-response" class="section-gap muted"></div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="api-client.js"></script>
+  <script src="auth.js"></script>
+  <script src="voice-input.js"></script>
+  <script src="meds_store.js"></script>
+  <script src="meds_simple.js"></script>
+  <script src="meds_popup.js"></script>
+  <script src="med_log.js"></script>
+  <script src="missed_meds.js"></script>
+  <script src="news2.js"></script>
+  <script src="symptoms.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

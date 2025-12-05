@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>History — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>History</h1>
+        <p class="muted">Event log for medication actions (take, undo, add, update, delete)</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="top-dropdown">
+        <button class="drop-btn btn">Pages ▾</button>
+        <div class="menu">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="medications.html">Medications</a>
+          <a href="vitals.html">Vitals</a>
+          <a href="symptoms.html">Symptoms</a>
+          <a href="fluids.html">Fluids</a>
+          <a href="foods.html">Foods</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="nav-group">
+        <h4>Pages</h4>
+        <a href="dashboard.html" class="side-link">Dashboard</a>
+        <a href="medications.html" class="side-link">Medications</a>
+        <a href="documents.html" class="side-link">Documents</a>
+        <a href="medical-history.html" class="side-link">Medical History</a>
+        <a href="vitals.html" class="side-link">Vitals</a>
+        <a href="symptoms.html" class="side-link">Symptoms</a>
+        <a href="fluids.html" class="side-link">Fluid Balance</a>
+        <a href="foods.html" class="side-link">Food Tracker</a>
+        <a href="personal.html" class="side-link">Personal</a>
+        <a href="holiday.html" class="side-link">Holiday Planner</a>
+        <a href="admin.html" class="side-link">Admin</a>
+        <a href="#" id="sidebar-archive-btn" class="side-link">Archive Now</a>
+      </div>
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="card">
+        <h2>Medication Events</h2>
+        <p class="muted">This log shows actions recorded by the application for medications. Events are stored locally in your browser.</p>
+        <div class="section-gap">
+          <div class="filter-row">
+            <input id="filter-text" placeholder="Filter by medication name or action" class="filter-input">
+            <button id="btn-clear-history" class="btn btn-ghost">Clear History</button>
+          </div>
+          <div id="history-list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="nav.js"></script>
+  <script src="auth.js"></script>
+  <script src="archive.js"></script>
+  <script src="history.js"></script>
+</body>
+</html>

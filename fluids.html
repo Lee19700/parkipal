@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fluid Balance</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>Fluid Balance</h1>
+        <p class="muted">Record intake and output; visual person shows net fluid level.</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="top-dropdown">
+        <button class="drop-btn btn">Pages ▾</button>
+        <div class="menu">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="medications.html">Medications</a>
+          <a href="vitals.html">Vitals</a>
+          <a href="symptoms.html">Symptoms</a>
+          <a href="fluids.html">Fluids</a>
+          <a href="foods.html">Foods</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="card">
+        <h2>Add Record</h2>
+        <form id="fluid-form">
+          <label>Type<br>
+            <select id="fluid-type">
+              <option value="intake">Intake</option>
+              <option value="output">Output</option>
+            </select>
+          </label>
+
+          <label>Amount (mL)<br>
+            <input id="amount" type="number" min="0" step="1" value="250">
+          </label>
+
+          <label>Date & time<br>
+            <input id="fluid-time" type="datetime-local">
+          </label>
+
+          <label>Notes<br>
+            <input id="fluid-notes">
+          </label>
+
+          <div class="form-actions">
+            <button id="add-fluid" type="button">Add</button>
+            <button id="clear-fluids" type="button">Clear All</button>
+          </div>
+        </form>
+
+        <h3>Totals</h3>
+        <p><strong>Intake:</strong> <span id="total-intake">0</span> mL — <strong>Output:</strong> <span id="total-output">0</span> mL — <strong>Net:</strong> <span id="net-balance">0</span> mL</p>
+
+        <div class="fluid-visual">
+          <div class="person-wrap">
+            <canvas id="body-canvas" width="300" height="500"></canvas>
+            <div class="fluid-legend"><small>Visual scale: net fluid mapped to range -2000 mL → +4000 mL</small></div>
+          </div>
+        </div>
+
+        <h3>History</h3>
+        <div id="fluid-entries"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <small>Data stored locally in your browser.</small>
+  </footer>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="api-client.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    if (window.PPAuth && typeof window.PPAuth.requireAuth === 'function') window.PPAuth.requireAuth();
+    else document.addEventListener('DOMContentLoaded', function(){ if (window.PPAuth) window.PPAuth.requireAuth(); });
+  </script>
+  <script src="fluids.js"></script>
+  <script src="archive.js"></script>
+</body>
+</html>

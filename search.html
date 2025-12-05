@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Search — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar">
+    <div class="brand"><div class="logo">PP</div><div><h1>Search</h1><p class="muted">Search your data and archives</p></div></div>
+    <div class="top-actions"></div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="card">
+        <h2>Global Search</h2>
+        <p class="muted">Search current storage and monthly archives for text matches.</p>
+        <div class="section-gap">
+          <label for="search-query">Search query</label>
+          <input id="search-query" placeholder="e.g. levodopa, appointment, allergy">
+          <div class="form-actions"><button id="search-btn" class="btn btn-primary">Search</button> <button id="search-clear" class="btn btn-ghost">Clear</button></div>
+          <div id="search-status" class="muted section-gap"></div>
+          <div id="search-results" class="section-gap"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="auth.js"></script>
+  <script src="archive.js"></script>
+  <script src="search.js"></script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Symptoms Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>Parkinson's Symptoms Tracker</h1>
+        <p class="muted">Log daily symptoms and severity to monitor trends over time.</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="top-dropdown">
+        <button class="drop-btn btn">Pages ▾</button>
+        <div class="menu">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="medications.html">Medications</a>
+          <a href="vitals.html">Vitals</a>
+          <a href="symptoms.html">Symptoms</a>
+          <a href="fluids.html">Fluids</a>
+          <a href="foods.html">Foods</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+    <section class="card">
+      <h2>New Entry</h2>
+      <form id="symptom-form">
+        <label>Date & time<br>
+          <input id="entryTime" type="datetime-local">
+        </label>
+
+        <div class="symptom-grid">
+          <label>Tremor<br>
+            <select id="tremor">
+              <option value="0">0 — None</option>
+              <option value="1">1 — Very mild</option>
+              <option value="2">2 — Mild</option>
+              <option value="3">3 — Moderate</option>
+              <option value="4">4 — Severe</option>
+            </select>
+          </label>
+
+          <label>Bradykinesia<br>
+            <select id="bradykinesia">
+              <option value="0">0 — None</option>
+              <option value="1">1 — Very mild</option>
+              <option value="2">2 — Mild</option>
+              <option value="3">3 — Moderate</option>
+              <option value="4">4 — Severe</option>
+            </select>
+          </label>
+
+          <label>Rigidity<br>
+            <select id="rigidity">
+              <option value="0">0 — None</option>
+              <option value="1">1 — Very mild</option>
+              <option value="2">2 — Mild</option>
+              <option value="3">3 — Moderate</option>
+              <option value="4">4 — Severe</option>
+            </select>
+          </label>
+
+          <label>Gait/Balance<br>
+            <select id="gait">
+              <option value="0">0 — None</option>
+              <option value="1">1 — Very mild</option>
+              <option value="2">2 — Mild</option>
+              <option value="3">3 — Moderate</option>
+              <option value="4">4 — Severe</option>
+            </select>
+          </label>
+
+          <label>Dyskinesia<br>
+            <select id="dyskinesia">
+              <option value="0">0 — None</option>
+              <option value="1">1 — Very mild</option>
+              <option value="2">2 — Mild</option>
+              <option value="3">3 — Moderate</option>
+              <option value="4">4 — Severe</option>
+            </select>
+          </label>
+
+          <label>Sleep quality<br>
+            <select id="sleep">
+              <option value="0">0 — Good</option>
+              <option value="1">1 — Slightly poor</option>
+              <option value="2">2 — Fair</option>
+              <option value="3">3 — Poor</option>
+              <option value="4">4 — Very poor</option>
+            </select>
+          </label>
+
+          <label>Mood<br>
+            <select id="mood">
+              <option value="0">0 — Good</option>
+              <option value="1">1 — Slightly low</option>
+              <option value="2">2 — Low</option>
+              <option value="3">3 — Depressed</option>
+              <option value="4">4 — Very depressed</option>
+            </select>
+          </label>
+
+          <label>Cognition<br>
+            <select id="cognition">
+              <option value="0">0 — Normal</option>
+              <option value="1">1 — Slight difficulty</option>
+              <option value="2">2 — Mild difficulty</option>
+              <option value="3">3 — Moderate difficulty</option>
+              <option value="4">4 — Severe difficulty</option>
+            </select>
+          </label>
+        </div>
+
+        <label>Notes<br>
+          <textarea id="notes" rows="3" class="full-width"></textarea>
+        </label>
+
+        <div class="form-actions">
+          <button id="add-entry" type="button">Add Entry</button>
+          <button id="clear-all" type="button">Clear All Entries</button>
+        </div>
+      </form>
+
+      <h3>History</h3>
+      <div id="entries"></div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Entries are stored locally in your browser (no data leaves your device).</small>
+  </footer>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="api-client.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    if (window.PPAuth && typeof window.PPAuth.requireAuth === 'function') window.PPAuth.requireAuth();
+    else document.addEventListener('DOMContentLoaded', function(){ if (window.PPAuth) window.PPAuth.requireAuth(); });
+  </script>
+  <script src="voice-input.js"></script>
+  <script src="symptoms.js"></script>
+  <script src="archive.js"></script>
+  <script src="nav.js"></script>
+</body>
+</html>

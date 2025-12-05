@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vitals & NEWS2</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>Vitals & NEWS2</h1>
+        <p class="muted">Enter vital signs below to calculate the NEWS2 score.</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="top-dropdown">
+        <button class="drop-btn btn">Pages ▾</button>
+        <div class="menu">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="medications.html">Medications</a>
+          <a href="vitals.html">Vitals</a>
+          <a href="symptoms.html">Symptoms</a>
+          <a href="fluids.html">Fluids</a>
+          <a href="foods.html">Foods</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+    <section class="card">
+      <h2>Vitals</h2>
+      <form id="vitals-form">
+        <label>Respiratory rate (breaths/min)<br>
+          <input id="respiratoryRate" type="number" min="0" step="1" required>
+        </label>
+
+        <label>Oxygen saturation (SpO₂ %)<br>
+          <input id="oxygenSat" type="number" min="0" max="100" step="0.1" required>
+        </label>
+
+        <label><input id="suppO2" type="checkbox"> Receiving supplemental oxygen</label>
+
+        <label>Oxygen saturation scale<br>
+          <select id="spo2Scale">
+            <option value="1" selected>Scale 1 (most patients)</option>
+            <option value="2">Scale 2 (hypercapnic respiratory failure)</option>
+          </select>
+        </label>
+
+        <label>Temperature (°C)<br>
+          <input id="temperature" type="number" step="0.1" required>
+        </label>
+
+        <label>Systolic blood pressure (mmHg)<br>
+          <input id="systolicBP" type="number" step="1" required>
+        </label>
+
+        <label>Heart rate (beats/min)<br>
+          <input id="heartRate" type="number" step="1" required>
+        </label>
+
+        <label>Level of consciousness<br>
+          <select id="consciousness">
+            <option value="A" selected>Alert</option>
+            <option value="V">Responds to Voice</option>
+            <option value="P">Responds to Pain</option>
+            <option value="U">Unresponsive</option>
+          </select>
+        </label>
+
+        <div class="form-actions">
+          <button id="save-news2" type="button" class="btn btn-primary">Save NEWS2</button>
+          <button id="reset-btn" type="reset">Reset</button>
+        </div>
+      </form>
+
+      <div id="result" class="result">
+        <h3>NEWS2 Score (Auto-calculated)</h3>
+        <p id="total-score"><strong>Total score:</strong> <span>—</span></p>
+        <p id="urgency"><strong>Urgency:</strong> <span>—</span></p>
+        <h4>Breakdown</h4>
+        <ul id="breakdown"></ul>
+      </div>
+    </section>
+
+    <section class="card section-gap">
+      <h2>Saved Vitals History</h2>
+      <div id="vitals-history"></div>
+      <div class="form-actions">
+        <button id="clear-vitals-history" class="btn btn-danger">Clear History</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <small>NEWS2 is a tool to support clinical assessment. Use clinical judgement.</small>
+  </footer>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="api-client.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    // Require login for this page
+    if (window.PPAuth && typeof window.PPAuth.requireAuth === 'function') window.PPAuth.requireAuth();
+    else document.addEventListener('DOMContentLoaded', function(){ if (window.PPAuth) window.PPAuth.requireAuth(); });
+  </script>
+  <script src="news2.js"></script>
+  <script src="archive.js"></script>
+  <script src="nav.js"></script>
+</body>
+</html>

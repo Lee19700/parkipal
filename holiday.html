@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Holiday Planner — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>Holiday Planner</h1>
+        <p class="muted">Plan which medications to bring and how many tablets you'll need.</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="top-dropdown">
+        <button class="drop-btn btn">Pages ▾</button>
+        <div class="menu">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="medications.html">Medications</a>
+          <a href="vitals.html">Vitals</a>
+          <a href="symptoms.html">Symptoms</a>
+          <a href="fluids.html">Fluids</a>
+          <a href="foods.html">Foods</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="card">
+        <h2>Plan a trip</h2>
+        <p class="muted">Choose dates and the medications you plan to bring. The planner will estimate how many tablets you'll need and flag shortages.</p>
+
+        <div class="section-gap">
+          <label>Trip start date<br>
+            <input id="trip-start" type="date">
+          </label>
+
+          <label>Trip end date<br>
+            <input id="trip-end" type="date">
+          </label>
+
+          <label>Extra buffer days (optional)<br>
+            <input id="buffer-days" type="number" min="0" value="1">
+          </label>
+
+          <label>Select medications to include (choose multiple)<br>
+            <select id="holiday-meds" multiple size="8" class="full-width-select"></select>
+          </label>
+
+          <div class="form-actions">
+            <button id="generate-plan" class="btn btn-primary">Generate Plan</button>
+            <button id="clear-plan" class="btn btn-ghost">Clear</button>
+          </div>
+
+          <div id="planner-status" class="muted section-gap"></div>
+
+          <div id="plan-results" class="section-gap"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="auth.js"></script>
+  <script src="archive.js"></script>
+  <script src="holiday.js"></script>
+</body>
+</html>

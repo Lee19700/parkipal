@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Personal Details — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar" id="topbar-main">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>Personal Details</h1>
+        <p class="muted">Your profile and contact information</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="top-dropdown">
+        <button class="drop-btn btn">Pages ▾</button>
+        <div class="menu">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="medications.html">Medications</a>
+          <a href="vitals.html">Vitals</a>
+          <a href="symptoms.html">Symptoms</a>
+          <a href="fluids.html">Fluids</a>
+          <a href="foods.html">Foods</a>
+        </div>
+      </div>
+      <div id="user-status">
+        <div id="status-when-logged-out">
+          <button id="show-login" class="btn btn-primary" type="button">Log In</button>
+        </div>
+        <div id="status-when-logged-in" class="hidden">
+          <div>Signed in as <strong id="current-username"></strong></div>
+          <div class="user-controls">
+            <button id="account-settings-btn" class="btn btn-ghost" type="button">Account</button>
+            <button id="btn-logout" class="btn" type="button">Log out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell" id="app-shell-main">
+    <aside class="sidebar" id="sidebar-main">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="card" id="profile-section" aria-labelledby="personal-title">
+        <h2 id="personal-title">Profile</h2>
+        <p class="muted">Update your display name and contact details. These are stored locally in your browser.</p>
+
+        <div class="section-gap">
+          <label for="pd-username">Username</label>
+          <input id="pd-username" readonly>
+
+            <label for="pd-display">Display name</label>
+            <input id="pd-display" placeholder="How your name appears in the app">
+
+            <label for="pd-fullname">Full name</label>
+            <input id="pd-fullname" placeholder="Optional">
+
+            <label for="pd-email">Email</label>
+            <input id="pd-email" type="email" placeholder="Optional">
+
+            <label for="pd-phone">Phone</label>
+            <input id="pd-phone" placeholder="Optional">
+
+            <label for="pd-dob">Date of birth</label>
+            <input id="pd-dob" type="date">
+
+            <label for="pd-emergency">Emergency contact</label>
+            <input id="pd-emergency" placeholder="Name and phone">
+
+            <label for="pd-notes">Notes</label>
+            <textarea id="pd-notes" rows="4" placeholder="Allergies, conditions, meds reminders..."></textarea>
+
+            <div class="form-actions">
+              <button id="pd-save" class="btn btn-primary">Save</button>
+              <button id="pd-cancel" class="btn btn-ghost">Cancel</button>
+            </div>
+
+            <div id="pd-status" class="muted section-gap"></div>
+          </div>
+
+          <!-- Biometric Authentication Section -->
+          <div class="section-gap biometric-section">
+            <h3>Biometric Authentication</h3>
+            <p class="muted">Use fingerprint or Face ID to log in quickly and securely</p>
+            
+            <div id="biometric-status" class="biometric-status-text"></div>
+            
+            <div class="form-actions">
+              <button id="enable-biometric" class="btn btn-primary">Enable Fingerprint / Face ID</button>
+              <button id="disable-biometric" class="btn btn-danger hidden">Disable Biometric Login</button>
+            </div>
+
+            <div class="biometric-info section-gap">
+              <p class="muted-small">
+                <strong>How it works:</strong><br>
+                • Your device will ask you to scan your fingerprint or face<br>
+                • This creates a secure credential stored only on your device<br>
+                • Next time you log in, just enter your username and tap the fingerprint icon<br>
+                • Works on devices with Windows Hello, Touch ID, or Face ID
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+  </div>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    // Require authentication - redirect to login2.html if not logged in
+    if (window.PPAuth && typeof window.PPAuth.requireAuth === 'function') {
+      window.PPAuth.requireAuth();
+    }
+  </script>
+  <script src="voice-input.js"></script>
+  <script src="archive.js"></script>
+  <script src="personal.js"></script>
+</body>
+</html>

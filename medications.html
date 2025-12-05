@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Medications — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div id="debug-banner" class="ai-warning"></div>
+  <div id="low-stock-banner" class="low-stock-banner"></div>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>Medications</h1>
+        <p class="muted">Add, edit and manage your medication schedule</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="top-dropdown">
+        <button class="drop-btn btn">Pages ▾</button>
+        <div class="menu">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="medications.html">Medications</a>
+          <a href="vitals.html">Vitals</a>
+          <a href="symptoms.html">Symptoms</a>
+          <a href="fluids.html">Fluids</a>
+          <a href="foods.html">Foods</a>
+        </div>
+      </div>
+      <div id="user-status">
+        <div id="status-when-logged-out">
+          <button id="show-login" class="btn btn-primary" type="button">Log In</button>
+        </div>
+        <div id="status-when-logged-in" class="hidden">
+          <div>Signed in as <strong id="current-username"></strong></div>
+          <div class="user-controls">
+            <a href="personal.html" class="btn btn-ghost">Profile</a>
+            <button id="btn-logout" class="btn" type="button">Log out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="card" id="med-card" aria-labelledby="med-card-title">
+        <div class="card-header-flex">
+          <div>
+            <h2 id="med-card-title" class="card-header-title">Medications</h2>
+            <p class="muted card-header-subtitle">Manage your medication schedule and stock. View the history separately.</p>
+          </div>
+          <button id="show-meds-popup-btn" class="btn btn-primary">Meds Due Now</button>
+        </div>
+
+        <div class="section-gap meds-page">
+          <#            <h3 class="muted-small">Add / Edit</h3>
+            <label for="parkinsons-meds-select">Medication</label>
+            <div class="med-select-row">
+              <select id="parkinsons-meds-select" aria-label="Common Parkinson's medications"></select>
+              <button id="add-selected-med" class="btn btn-primary">Add</button>
+            </div>
+
+            <label for="med-times-simple">Time(s) to take (HH:MM) — comma-separated</label>
+            <input id="med-times-simple" placeholder="08:00, 20:00">
+
+            <label for="med-tablets-per-dose-simple">Tablets per dose</label>
+            <input id="med-tablets-per-dose-simple" type="number" min="1" value="1" placeholder="e.g. 2">
+
+            <label for="med-stock-simple">Tablets left (total stock)</label>
+            <input id="med-stock-simple" type="number" min="0" placeholder="e.g. 42">
+
+            <div class="form-actions">
+              <button id="btn-save-simple" class="btn btn-primary">Save</button>
+              <button id="btn-clear-simple" class="btn btn-ghost">Clear</button>
+            </div>
+
+            <div id="simple-status" class="muted section-gap"></div>
+            <div class="muted-small section-gap"><a href="history.html" class="btn btn-ghost">View medication history</a></div>
+          </div>
+
+          <div class="card meds-form-card">
+            <h3 class="muted-small">Add New Medication</h3>
+            <p class="muted custom-form-subtitle">Create a custom medication not in the list above</p>
+            
+            <label for="custom-med-name">Medication Name</label>
+            <input id="custom-med-name" type="text" placeholder="e.g., Aspirin">
+
+            <label for="custom-med-dose">Dose / Strength</label>
+            <input id="custom-med-dose" type="text" placeholder="e.g., 100mg">
+
+            <label for="custom-med-times">Time(s) to take (HH:MM) — comma-separated</label>
+            <input id="custom-med-times" placeholder="08:00, 20:00">
+
+            <label for="custom-med-tablets-per-dose">Tablets per dose</label>
+            <input id="custom-med-tablets-per-dose" type="number" min="1" value="1" placeholder="e.g. 2">
+
+            <label for="custom-med-stock">Tablets left (total stock)</label>
+            <input id="custom-med-stock" type="number" min="0" placeholder="e.g. 30">
+
+            <label for="custom-med-notes">Notes (optional)</label>
+            <textarea id="custom-med-notes" rows="2" placeholder="e.g., Take with food"></textarea>
+
+            <div class="form-actions">
+              <button id="btn-save-custom" class="btn btn-primary">Save Custom Medication</button>
+              <button id="btn-clear-custom" class="btn btn-ghost">Clear</button>
+            </div>
+
+            <div id="custom-status" class="muted section-gap"></div>
+          </div>
+
+          <div class="card">
+            <h3 class="muted-small">Saved medications</h3>
+            <div id="simple-list" class="saved-list section-gap"></div>
+          </div>
+        </div>
+
+        <!-- Low Stock Alerts -->
+        <div class="section-gap">
+          <div class="card">
+            <h2>Low Stock Alerts</h2>
+            <p class="muted">Medications that need refilling soon</p>
+            <div id="low-stock-alerts"></div>
+          </div>
+        </div>
+
+        <!-- Manual Log Entry -->
+        <div class="section-gap">
+          <div class="card">
+            <h2>Manual Medication Entry</h2>
+            <p class="muted">Log medications taken when you couldn't access the system</p>
+            
+            <div class="manual-log-form">
+              <div class="form-row">
+                <div>
+                  <label for="manual-log-med">Medication</label>
+                  <select id="manual-log-med"></select>
+                </div>
+                <div>
+                  <label for="manual-log-date">Date</label>
+                  <input id="manual-log-date" type="date">
+                </div>
+                <div>
+                  <label for="manual-log-time">Time</label>
+                  <input id="manual-log-time" type="time">
+                </div>
+              </div>
+              
+              <label for="manual-log-notes">Notes (optional)</label>
+              <textarea id="manual-log-notes" rows="2" placeholder="e.g., Taken while away from home"></textarea>
+              
+              <div class="form-actions">
+                <button id="btn-submit-manual-log" class="btn btn-primary">Log Entry</button>
+              </div>
+              
+              <div id="manual-log-status" class="muted section-gap"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Medication Ordering -->
+        <div class="section-gap">
+          <div class="card">
+            <h2>📦 Order Medications</h2>
+            <p class="muted">Review your medications and send order to your pharmacy</p>
+            
+            <div id="order-review-list" style="margin: 20px 0;"></div>
+            
+            <div class="card" style="background: #f9fafb; padding: 16px; margin: 20px 0;">
+              <h3 style="margin-top: 0;">Delivery Information</h3>
+              <div style="display: grid; gap: 12px;">
+                <div>
+                  <label for="order-name">Name</label>
+                  <input id="order-name" type="text" placeholder="Your name">
+                </div>
+                <div>
+                  <label for="order-address">Delivery Address</label>
+                  <textarea id="order-address" rows="2" placeholder="Street address, city, postcode"></textarea>
+                </div>
+                <div>
+                  <label for="order-phone">Phone Number</label>
+                  <input id="order-phone" type="tel" placeholder="Your phone number">
+                </div>
+                <div>
+                  <label for="order-pharmacy">Pharmacy</label>
+                  <input id="order-pharmacy" type="text" placeholder="Your pharmacy name">
+                </div>
+                <div>
+                  <label for="order-notes">Special Instructions (optional)</label>
+                  <textarea id="order-notes" rows="2" placeholder="Any special delivery or prescription notes"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button id="btn-generate-order" class="btn btn-primary">📋 Review Order</button>
+              <button id="btn-send-order" class="btn" style="background: #10b981; color: white;" disabled>✉️ Send to Pharmacy</button>
+            </div>
+
+            <div id="order-status" class="muted section-gap"></div>
+            <div id="order-preview" class="section-gap" style="display: none;">
+              <div class="card" style="background: #fff; border: 2px solid #3b82f6; padding: 20px;">
+                <h3 style="margin-top: 0;">Order Preview</h3>
+                <div id="order-preview-content"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Link to Medication Logs -->
+        <div class="section-gap">
+          <div class="card" style="background: #f0f9ff; border-left: 4px solid #3b82f6; padding: 16px;">
+            <p style="margin: 0;">
+              <strong>📋 View Medication History:</strong> 
+              <a href="medication-logs.html" class="btn btn-ghost" style="margin-left: 8px;">View Complete Medication Logs →</a>
+            </p>
+            <p class="muted" style="margin: 8px 0 0 0; font-size: 0.9rem;">
+              Protected read-only record of all medications taken
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+  </div>
+
+  <!-- auth and meds scripts -->
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="api-client.js"></script>
+  <script>
+    // Debug helpers: show banner and optionally bypass auth when ?debug=1
+    (function(){
+      function qs(id){return document.getElementById(id)}
+      var params = new URLSearchParams(location.search);
+      var debug = params.get('debug') === '1';
+      window.MEDS_PAGE_DEBUG = debug;
+      var banner = qs('debug-banner');
+      function show(msg){ if (!banner) return; banner.style.display='block'; banner.textContent = msg; }
+      function append(msg){ if (!banner) return; banner.textContent = banner.textContent + ' | ' + msg; }
+      // global error capture
+      window.addEventListener('error', function(ev){ try{ var msg = ev && ev.message ? ev.message : 'Unknown error'; var details = msg; if (ev.filename) details += ' at ' + ev.filename; if (ev.lineno) details += ':' + ev.lineno; show('Error: '+msg); }catch(e){} });
+      window.addEventListener('unhandledrejection', function(ev){ try{ append('Promise rejection: ' + (ev && ev.reason ? (ev.reason.message || String(ev.reason)) : 'Unknown')); }catch(e){} });
+      if (debug){ show('DEBUG MODE: auth bypass enabled'); }
+      // expose small helper
+      window.MEDS_DEBUG = { show: show, append: append };
+    })();
+  </script>
+  <script src="auth.js"></script>
+  <script src="voice-input.js"></script>
+  <script src="archive.js"></script>
+  <script src="meds_store.js"></script>
+  <script src="meds_list.js"></script>
+  <script src="meds_simple.js"></script>
+  <script src="meds_popup.js"></script>
+  <script src="med_log.js"></script>
+  <script src="missed_meds.js"></script>
+  <script>
+    // Medication Ordering System
+    (function() {
+      var orderData = null;
+      
+      function loadOrderReview() {
+        var reviewList = document.getElementById('order-review-list');
+        if (!reviewList) return;
+        
+        if (!window.MedsStore) {
+          reviewList.innerHTML = '<p class="muted">Loading medications...</p>';
+          return;
+        }
+        
+        var meds = window.MedsStore.load();
+        if (!meds || meds.length === 0) {
+          reviewList.innerHTML = '<p class="muted">No medications to order. Add medications first.</p>';
+          return;
+        }
+        
+        var html = '<div class="card" style="background: #f9fafb;"><h3 style="margin-top: 0;">Medications to Order</h3>';
+        html += '<div style="display: grid; gap: 12px;">';
+        
+        meds.forEach(function(med) {
+          var lowStock = med.stock <= 7;
+          html += '<div style="padding: 12px; background: white; border-radius: 6px; border: 1px solid ' + (lowStock ? '#f59e0b' : '#e5e7eb') + ';">';
+          html += '<div style="display: flex; justify-content: space-between; align-items: start;">';
+          html += '<div style="flex: 1;">';
+          html += '<div style="font-weight: 600;">' + med.name + (med.dose ? ' (' + med.dose + ')' : '') + '</div>';
+          html += '<div style="color: #6b7280; font-size: 0.9rem; margin-top: 4px;">Stock: ' + med.stock + ' tablets';
+          if (lowStock) html += ' <span style="color: #f59e0b; font-weight: 500;">⚠️ Low</span>';
+          html += '</div>';
+          html += '</div>';
+          html += '<label style="display: flex; align-items: center; gap: 8px;">';
+          html += '<input type="checkbox" class="med-order-checkbox" data-med-id="' + med.id + '" ' + (lowStock ? 'checked' : '') + '>';
+          html += '<span style="font-size: 0.9rem;">Order</span>';
+          html += '</label>';
+          html += '</div>';
+          html += '</div>';
+        });
+        
+        html += '</div></div>';
+        reviewList.innerHTML = html;
+      }
+      
+      function generateOrder() {
+        var checkboxes = document.querySelectorAll('.med-order-checkbox:checked');
+        if (checkboxes.length === 0) {
+          document.getElementById('order-status').textContent = 'Please select at least one medication to order.';
+          return;
+        }
+        
+        var name = document.getElementById('order-name').value.trim();
+        var address = document.getElementById('order-address').value.trim();
+        var phone = document.getElementById('order-phone').value.trim();
+        var pharmacy = document.getElementById('order-pharmacy').value.trim();
+        
+        if (!name || !address || !phone || !pharmacy) {
+          document.getElementById('order-status').textContent = 'Please fill in all delivery information fields.';
+          return;
+        }
+        
+        var meds = window.MedsStore.load();
+        var selectedMeds = [];
+        
+        checkboxes.forEach(function(cb) {
+          var medId = cb.getAttribute('data-med-id');
+          var med = meds.find(function(m) { return m.id === medId; });
+          if (med) selectedMeds.push(med);
+        });
+        
+        orderData = {
+          meds: selectedMeds,
+          name: name,
+          address: address,
+          phone: phone,
+          pharmacy: pharmacy,
+          notes: document.getElementById('order-notes').value.trim(),
+          date: new Date().toISOString()
+        };
+        
+        showOrderPreview();
+      }
+      
+      function showOrderPreview() {
+        var preview = document.getElementById('order-preview');
+        var content = document.getElementById('order-preview-content');
+        
+        var html = '<div style="font-family: monospace; white-space: pre-wrap;">';
+        html += 'MEDICATION ORDER REQUEST\n';
+        html += '========================\n\n';
+        html += 'Date: ' + new Date().toLocaleDateString() + '\n';
+        html += 'Time: ' + new Date().toLocaleTimeString() + '\n\n';
+        html += 'PATIENT INFORMATION:\n';
+        html += '-------------------\n';
+        html += 'Name: ' + orderData.name + '\n';
+        html += 'Phone: ' + orderData.phone + '\n';
+        html += 'Address: ' + orderData.address + '\n\n';
+        html += 'PHARMACY:\n';
+        html += '---------\n';
+        html += orderData.pharmacy + '\n\n';
+        html += 'MEDICATIONS TO ORDER:\n';
+        html += '--------------------\n';
+        
+        orderData.meds.forEach(function(med, idx) {
+          html += (idx + 1) + '. ' + med.name;
+          if (med.dose) html += ' (' + med.dose + ')';
+          html += '\n   Current stock: ' + med.stock + ' tablets\n';
+          if (med.notes) html += '   Notes: ' + med.notes + '\n';
+          html += '\n';
+        });
+        
+        if (orderData.notes) {
+          html += 'SPECIAL INSTRUCTIONS:\n';
+          html += '--------------------\n';
+          html += orderData.notes + '\n';
+        }
+        
+        html += '</div>';
+        content.innerHTML = html;
+        preview.style.display = 'block';
+        
+        document.getElementById('btn-send-order').disabled = false;
+        document.getElementById('order-status').innerHTML = '<span style="color: #10b981;">✓ Order ready to send. Review above and click "Send to Pharmacy".</span>';
+      }
+      
+      function sendOrder() {
+        if (!orderData) return;
+        
+        var orderText = 'MEDICATION ORDER REQUEST\n' +
+                       '========================\n\n' +
+                       'Date: ' + new Date().toLocaleDateString() + '\n' +
+                       'Time: ' + new Date().toLocaleTimeString() + '\n\n' +
+                       'PATIENT: ' + orderData.name + '\n' +
+                       'PHONE: ' + orderData.phone + '\n' +
+                       'ADDRESS: ' + orderData.address + '\n\n' +
+                       'PHARMACY: ' + orderData.pharmacy + '\n\n' +
+                       'MEDICATIONS:\n' +
+                       orderData.meds.map(function(med, idx) {
+                         return (idx + 1) + '. ' + med.name + (med.dose ? ' (' + med.dose + ')' : '') + 
+                                ' - Stock: ' + med.stock + ' tablets';
+                       }).join('\n') + '\n\n' +
+                       (orderData.notes ? 'NOTES: ' + orderData.notes : '');
+        
+        // Create mailto link
+        var subject = 'Medication Order Request - ' + orderData.name;
+        var body = encodeURIComponent(orderText);
+        var mailto = 'mailto:' + (orderData.pharmacy ? orderData.pharmacy.replace(/\s+/g, '') + '@pharmacy.com' : '') + 
+                     '?subject=' + encodeURIComponent(subject) + '&body=' + body;
+        
+        // Try to open email client
+        try {
+          window.location.href = mailto;
+          document.getElementById('order-status').innerHTML = '<span style="color: #10b981;">✓ Opening email client... If it doesn\'t open, copy the order text above and send manually.</span>';
+        } catch(e) {
+          document.getElementById('order-status').innerHTML = '<span style="color: #f59e0b;">Please copy the order text above and email to your pharmacy.</span>';
+        }
+      }
+      
+      document.addEventListener('DOMContentLoaded', function() {
+        loadOrderReview();
+        
+        var btnGenerate = document.getElementById('btn-generate-order');
+        var btnSend = document.getElementById('btn-send-order');
+        
+        if (btnGenerate) {
+          btnGenerate.addEventListener('click', generateOrder);
+        }
+        
+        if (btnSend) {
+          btnSend.addEventListener('click', sendOrder);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Parkinson's Pal</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .box {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 350px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+      font-weight: 600;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    button:hover {
+      background: #5568d3;
+    }
+    button.secondary {
+      background: #6c757d;
+    }
+    button.secondary:hover {
+      background: #5a6268;
+    }
+    .error {
+      background: #fee;
+      border: 1px solid #fcc;
+      color: #c33;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      display: none;
+    }
+    .link {
+      text-align: center;
+      margin-top: 15px;
+      color: #667eea;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h1>🏥 Parkinson's Pal</h1>
+  
+  <!-- Login Form -->
+  <div id="loginView">
+    <div id="loginError" class="error"></div>
+    
+    <label>Username</label>
+    <input type="text" id="loginUser" placeholder="Enter username">
+    
+    <label>Password</label>
+    <input type="password" id="loginPass" placeholder="Enter password">
+    
+    <button onclick="doLogin()">Log In</button>
+    
+    <div class="link" onclick="showRegister()">Create new account</div>
+  </div>
+  
+  <!-- Register Form -->
+  <div id="registerView" class="hidden">
+    <div id="registerError" class="error"></div>
+    
+    <label>Username</label>
+    <input type="text" id="regUser" placeholder="Choose username">
+    
+    <label>Password</label>
+    <input type="password" id="regPass" placeholder="Choose password">
+    
+    <label>Display Name (optional)</label>
+    <input type="text" id="regDisplay" placeholder="Your name">
+    
+    <button onclick="doRegister()">Create Account</button>
+    <button class="secondary" onclick="showLogin()">Back to Login</button>
+  </div>
+</div>
+
+<script>
+console.log('Page loaded');
+
+// Check if already logged in
+var currentUser = localStorage.getItem('pp_current_user');
+if (currentUser) {
+  try {
+    var user = JSON.parse(currentUser);
+    if (user && user.username) {
+      console.log('Already logged in as:', user.username);
+      window.location.href = 'dashboard.html';
+    }
+  } catch(e) {}
+}
+
+function showRegister() {
+  document.getElementById('loginView').classList.add('hidden');
+  document.getElementById('registerView').classList.remove('hidden');
+}
+
+function showLogin() {
+  document.getElementById('registerView').classList.add('hidden');
+  document.getElementById('loginView').classList.remove('hidden');
+}
+
+async function hashPassword(password) {
+  var encoder = new TextEncoder();
+  var data = encoder.encode(password);
+  var hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  var hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function doLogin() {
+  console.log('Login clicked');
+  
+  var username = document.getElementById('loginUser').value.trim();
+  var password = document.getElementById('loginPass').value;
+  var errorDiv = document.getElementById('loginError');
+  
+  if (!username || !password) {
+    errorDiv.textContent = 'Please enter username and password';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  try {
+    var hashedPass = await hashPassword(password);
+    var usersJson = localStorage.getItem('pp_users_v1') || '[]';
+    var users = JSON.parse(usersJson);
+    
+    console.log('Checking', users.length, 'users');
+    
+    var user = users.find(u => u.username === username && u.passwordHash === hashedPass);
+    
+    if (user) {
+      console.log('Login successful!');
+      localStorage.setItem('pp_current_user', JSON.stringify({
+        username: user.username,
+        display: user.display || user.username
+      }));
+      window.location.href = 'dashboard.html';
+    } else {
+      errorDiv.textContent = 'Invalid username or password';
+      errorDiv.style.display = 'block';
+    }
+  } catch(err) {
+    console.error('Login error:', err);
+    errorDiv.textContent = 'Error: ' + err.message;
+    errorDiv.style.display = 'block';
+  }
+}
+
+async function doRegister() {
+  console.log('Register clicked');
+  
+  var username = document.getElementById('regUser').value.trim();
+  var password = document.getElementById('regPass').value;
+  var display = document.getElementById('regDisplay').value.trim();
+  var errorDiv = document.getElementById('registerError');
+  
+  if (!username || !password) {
+    errorDiv.textContent = 'Please enter username and password';
+    errorDiv.style.display = 'block';
+    return;
+  }
+  
+  try {
+    var usersJson = localStorage.getItem('pp_users_v1') || '[]';
+    var users = JSON.parse(usersJson);
+    
+    if (users.find(u => u.username === username)) {
+      errorDiv.textContent = 'Username already exists';
+      errorDiv.style.display = 'block';
+      return;
+    }
+    
+    var hashedPass = await hashPassword(password);
+    
+    users.push({
+      username: username,
+      passwordHash: hashedPass,
+      display: display || username
+    });
+    
+    localStorage.setItem('pp_users_v1', JSON.stringify(users));
+    
+    console.log('Registration successful!');
+    
+    localStorage.setItem('pp_current_user', JSON.stringify({
+      username: username,
+      display: display || username
+    }));
+    
+    window.location.href = 'dashboard.html';
+  } catch(err) {
+    console.error('Register error:', err);
+    errorDiv.textContent = 'Error: ' + err.message;
+    errorDiv.style.display = 'block';
+  }
+}
+
+// Enter key support
+document.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    if (!document.getElementById('registerView').classList.contains('hidden')) {
+      doRegister();
+    } else {
+      doLogin();
+    }
+  }
+});
+
+console.log('All functions ready');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Documents — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>Documents</h1>
+        <p class="muted">Store and analyze medical letters, reports and documents</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="top-dropdown">
+        <button class="drop-btn btn">Pages ▾</button>
+        <div class="menu">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="medications.html">Medications</a>
+          <a href="documents.html">Documents</a>
+          <a href="vitals.html">Vitals</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="card">
+        <h2>Add Document</h2>
+        <form id="doc-form">
+          <input type="hidden" id="doc-id">
+          
+          <label>Document Title<br>
+            <input id="doc-title" placeholder="e.g., Neurology Letter - Dr. Smith" required>
+          </label>
+
+          <label>Date<br>
+            <input id="doc-date" type="date" required>
+          </label>
+
+          <label>Document Type<br>
+            <select id="doc-type">
+              <option value="letter">Medical Letter</option>
+              <option value="report">Test Report</option>
+              <option value="prescription">Prescription</option>
+              <option value="referral">Referral</option>
+              <option value="discharge">Discharge Summary</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+
+          <label>Document Content<br>
+            <textarea id="doc-content" rows="12" placeholder="Paste or type the full text of your document here..." required></textarea>
+          </label>
+
+          <label>Notes (optional)<br>
+            <textarea id="doc-notes" rows="3" placeholder="Add your own notes or reminders about this document..."></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button id="save-doc" class="btn btn-primary" type="button">Save Document</button>
+            <button id="analyze-doc" class="btn btn-ghost" type="button">Analyze & Save</button>
+            <button id="clear-doc" class="btn btn-ghost" type="button">Clear</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card section-gap" id="analysis-section">
+        <h2>Document Analysis</h2>
+        <div id="analysis-result"></div>
+        <div class="form-actions">
+          <button id="ask-question-btn" class="btn btn-primary">Ask a Question</button>
+          <button id="close-analysis" class="btn btn-ghost">Close</button>
+        </div>
+      </section>
+
+      <section class="card section-gap" id="question-section">
+        <h3>Ask About This Document</h3>
+        <textarea id="question-input" rows="3" placeholder="What would you like to know about this document?"></textarea>
+        <div class="form-actions">
+          <button id="submit-question" class="btn btn-primary">Submit Question</button>
+          <button id="cancel-question" class="btn btn-ghost">Cancel</button>
+        </div>
+        <div id="answer-result" class="section-gap"></div>
+      </section>
+
+      <section class="card section-gap">
+        <h2>Saved Documents</h2>
+        <div class="filter-row">
+          <label for="filter-type" class="sr-only">Filter by document type</label>
+          <select id="filter-type" class="filter-input" title="Filter by document type">
+            <option value="">All Types</option>
+            <option value="letter">Medical Letters</option>
+            <option value="report">Test Reports</option>
+            <option value="prescription">Prescriptions</option>
+            <option value="referral">Referrals</option>
+            <option value="discharge">Discharge Summaries</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div id="documents-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="api-client.js"></script>
+  <script src="auth.js"></script>
+  <script src="voice-input.js"></script>
+  <script src="archive.js"></script>
+  <script src="documents.js"></script>
+</body>
+</html>

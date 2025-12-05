@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Medical History — Parkinson's Pal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script src="debug-banner.js"></script>
+  <script src="theme.js"></script>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <h1>Medical History</h1>
+        <p class="muted">Complete medical history and hospital details</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="top-dropdown">
+        <button class="drop-btn btn">Pages ▾</button>
+        <div class="menu">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="medications.html">Medications</a>
+          <a href="medical-history.html">Medical History</a>
+          <a href="vitals.html">Vitals</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <!-- Sidebar content loaded by sidebar-nav.js -->
+    </aside>
+
+    <main class="content" id="app-main">
+      <section class="card">
+        <h2>Hospital Numbers & Details</h2>
+        <p class="muted">Record your hospital and NHS numbers for quick reference</p>
+        
+        <div id="hospital-numbers">
+          <div class="hospital-entry">
+            <h4>Hospital 1</h4>
+            <label>Hospital Name<br>
+              <input id="hosp1-name" placeholder="e.g., Queen Elizabeth Hospital">
+            </label>
+            <label>Hospital Number<br>
+              <input id="hosp1-number" placeholder="e.g., QE123456">
+            </label>
+            <label>Department/Specialty<br>
+              <input id="hosp1-dept" placeholder="e.g., Neurology">
+            </label>
+          </div>
+
+          <div class="hospital-entry section-gap">
+            <h4>Hospital 2</h4>
+            <label>Hospital Name<br>
+              <input id="hosp2-name" placeholder="e.g., Royal Free Hospital">
+            </label>
+            <label>Hospital Number<br>
+              <input id="hosp2-number" placeholder="e.g., RF987654">
+            </label>
+            <label>Department/Specialty<br>
+              <input id="hosp2-dept" placeholder="e.g., Geriatrics">
+            </label>
+          </div>
+
+          <div class="hospital-entry section-gap">
+            <h4>Hospital 3</h4>
+            <label>Hospital Name<br>
+              <input id="hosp3-name">
+            </label>
+            <label>Hospital Number<br>
+              <input id="hosp3-number">
+            </label>
+            <label>Department/Specialty<br>
+              <input id="hosp3-dept">
+            </label>
+          </div>
+
+          <div class="hospital-entry section-gap">
+            <h4>Hospital 4</h4>
+            <label>Hospital Name<br>
+              <input id="hosp4-name">
+            </label>
+            <label>Hospital Number<br>
+              <input id="hosp4-number">
+            </label>
+            <label>Department/Specialty<br>
+              <input id="hosp4-dept">
+            </label>
+          </div>
+
+          <div class="hospital-entry section-gap">
+            <h4>Hospital 5</h4>
+            <label>Hospital Name<br>
+              <input id="hosp5-name">
+            </label>
+            <label>Hospital Number<br>
+              <input id="hosp5-number">
+            </label>
+            <label>Department/Specialty<br>
+              <input id="hosp5-dept">
+            </label>
+          </div>
+
+          <div class="hospital-entry section-gap">
+            <h4>Hospital 6</h4>
+            <label>Hospital Name<br>
+              <input id="hosp6-name">
+            </label>
+            <label>Hospital Number<br>
+              <input id="hosp6-number">
+            </label>
+            <label>Department/Specialty<br>
+              <input id="hosp6-dept">
+            </label>
+          </div>
+        </div>
+
+        <div class="section-gap">
+          <label>NHS Number<br>
+            <input id="nhs-number" placeholder="e.g., 123 456 7890">
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button id="save-hospital-details" class="btn btn-primary">Save Hospital Details</button>
+        </div>
+      </section>
+
+      <section class="card section-gap">
+        <h2>General Medical History</h2>
+        
+        <label>Date of Parkinson's Diagnosis<br>
+          <input id="diagnosis-date" type="date">
+        </label>
+
+        <label>First Symptoms Noticed<br>
+          <textarea id="first-symptoms" rows="3" placeholder="Describe when and how you first noticed symptoms..."></textarea>
+        </label>
+
+        <label>Diagnosing Consultant/Neurologist<br>
+          <input id="diagnosing-doctor" placeholder="e.g., Dr. Jane Smith, Royal Free Hospital">
+        </label>
+
+        <h3 class="section-gap">Other Medical Conditions</h3>
+        <label>Current medical conditions (besides Parkinson's)<br>
+          <textarea id="other-conditions" rows="4" placeholder="List any other conditions: diabetes, high blood pressure, heart disease, etc."></textarea>
+        </label>
+
+        <h3 class="section-gap">Past Medical History</h3>
+        <label>Previous surgeries or hospital admissions<br>
+          <textarea id="past-surgeries" rows="4" placeholder="List any previous operations, hospitalizations, or major medical events..."></textarea>
+        </label>
+
+        <h3 class="section-gap">Family History</h3>
+        <label>Family history of Parkinson's or neurological conditions<br>
+          <textarea id="family-history" rows="3" placeholder="e.g., Father had Parkinson's disease, diagnosed at age 65..."></textarea>
+        </label>
+
+        <label>Other family medical history<br>
+          <textarea id="family-other" rows="3" placeholder="Any other significant family medical history..."></textarea>
+        </label>
+
+        <h3 class="section-gap">Lifestyle & Social History</h3>
+        <label>Smoking Status<br>
+          <select id="smoking-status">
+            <option value="">Select...</option>
+            <option value="never">Never smoked</option>
+            <option value="former">Former smoker</option>
+            <option value="current">Current smoker</option>
+          </select>
+        </label>
+
+        <label>If former/current smoker, details<br>
+          <input id="smoking-details" placeholder="e.g., 20 cigarettes/day for 15 years, quit 2010">
+        </label>
+
+        <label>Alcohol Consumption<br>
+          <select id="alcohol-status">
+            <option value="">Select...</option>
+            <option value="none">None</option>
+            <option value="occasional">Occasional (1-2 drinks/week)</option>
+            <option value="moderate">Moderate (3-7 drinks/week)</option>
+            <option value="heavy">Heavy (8+ drinks/week)</option>
+          </select>
+        </label>
+
+        <label>Exercise/Physical Activity<br>
+          <textarea id="exercise" rows="2" placeholder="Describe your typical exercise routine..."></textarea>
+        </label>
+
+        <label>Occupation (current or previous)<br>
+          <input id="occupation" placeholder="e.g., Teacher (retired)">
+        </label>
+
+        <h3 class="section-gap">Allergies & Intolerances</h3>
+        <label>Drug allergies<br>
+          <textarea id="drug-allergies" rows="3" placeholder="List any medications you're allergic to and what reaction you had..."></textarea>
+        </label>
+
+        <label>Food allergies or intolerances<br>
+          <textarea id="food-allergies" rows="2" placeholder="e.g., Lactose intolerant, peanut allergy..."></textarea>
+        </label>
+
+        <h3 class="section-gap">Current Symptoms & Impact</h3>
+        <label>Main symptoms currently affecting you<br>
+          <textarea id="current-symptoms" rows="4" placeholder="Describe your current symptoms and how they affect daily life..."></textarea>
+        </label>
+
+        <label>Mobility aids used<br>
+          <textarea id="mobility-aids" rows="2" placeholder="e.g., Walking stick, walking frame, wheelchair, etc."></textarea>
+        </label>
+
+        <label>Care support<br>
+          <textarea id="care-support" rows="3" placeholder="Describe any care support you receive: family, carers, home help, etc."></textarea>
+        </label>
+
+        <h3 class="section-gap">Additional Information</h3>
+        <label>Blood type (if known)<br>
+          <select id="blood-type">
+            <option value="">Select...</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </label>
+
+        <label>Other important medical information<br>
+          <textarea id="other-info" rows="4" placeholder="Any other information you think is important for healthcare providers to know..."></textarea>
+        </label>
+
+        <div class="form-actions section-gap">
+          <button id="save-medical-history" class="btn btn-primary">Save Medical History</button>
+        </div>
+
+        <div id="save-status" class="muted section-gap"></div>
+      </section>
+
+      <section class="card section-gap">
+        <h2>Quick Reference Summary</h2>
+        <div id="summary-view"></div>
+        <div class="form-actions">
+          <button id="print-summary" class="btn btn-ghost">Print Summary</button>
+          <button id="export-summary" class="btn btn-ghost">Export as Text</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="sidebar-nav.js"></script>
+  <script src="nav.js"></script>
+  <script src="auth.js"></script>
+  <script src="archive.js"></script>
+  <script src="medical-history.js"></script>
+</body>
+</html>
